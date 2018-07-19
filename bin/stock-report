@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+require "./lib/stock_report.rb"
+StockReport::CLI.new.call
