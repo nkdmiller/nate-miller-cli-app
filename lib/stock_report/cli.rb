@@ -15,8 +15,9 @@ class StockReport::CLI
       input = gets.strip
       if input == "1"
         StockReport::Report.new.list
-      end
-      if input == "3"
+      elsif input == "2"
+        StockReport::Report.new.add
+      elsif input == "3"
         StockReport::Report.new.check
       end
     end
