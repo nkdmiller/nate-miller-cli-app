@@ -1,0 +1,8 @@
+<root>
+  <stocks>
+    <stock>
+      <quantity>3</quantity>
+      <symbol>MSFT</symbol>
+    </stock>
+  </stocks>
+</root>

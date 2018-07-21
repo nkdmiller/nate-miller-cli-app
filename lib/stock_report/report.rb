@@ -16,15 +16,25 @@ class StockReport::Report
   end
 
   def list
-    list = File.read("./report.txt").split("\n")
-    list.each do |stock|
-      stock.chomp!
-      url = "https://www.nasdaq.com/symbol/#{stock}"
+    puts "------------------------------------------"
+    total = 0.0
+    list = Nokogiri::XML(File.open("report.xml"))
+    stocks = list.xpath("//stock")
+    symbol = stocks.xpath("symbol").text
+    quantity = stocks.xpath("quantity").text.to_i
+    stocks.each do |stock|
+      symbol = stocks.xpath("symbol").text
+      quantity = stocks.xpath("quantity").text.to_f
+      url = "https://www.nasdaq.com/symbol/#{symbol}"
       doc = Nokogiri::HTML(open(url))
       price = doc.css("div.qwidget-dollar").text
       price.delete!("*")
-      puts "#{stock} - #{price}"
+      price.delete!("$")
+      price = (price.to_f * quantity).round(2)
+      puts "#{quantity.to_i} of #{symbol} - $#{price}"
+      total += price
     end
+    puts "For a total portfolio value of $#{total}"
   end
 
   def add
