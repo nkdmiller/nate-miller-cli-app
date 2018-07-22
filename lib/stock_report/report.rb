@@ -73,4 +73,17 @@ class StockReport::Report
       end
     end
   end
+  def remove
+    puts "Please enter the symbol of the stock you wish to remove."
+    input = gets.strip
+    report = Nokogiri::XML(File.open("report.xml"))
+    report.xpath("//stocks/stock").each do |stock|
+      stock.children.each do |child|
+        if child.text.upcase == input.upcase
+          stock.remove
+        end
+      end
+    end
+    File.write("report.xml", report.to_xml)
+  end
 end

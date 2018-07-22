@@ -19,6 +19,8 @@ class StockReport::CLI
         StockReport::Report.new.add
       elsif input == "3"
         StockReport::Report.new.check
+      elsif input == "4"
+        StockReport::Report.new.remove
       end
     end
   end
