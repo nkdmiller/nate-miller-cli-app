@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <root>
   <stocks>
-<stock><quantity>99999</quantity><symbol>msft</symbol></stock><stock><quantity>555</quantity><symbol>aapl</symbol></stock><stock><quantity>3</quantity><symbol>dis</symbol></stock><stock><quantity>7</quantity><symbol>h</symbol></stock><stock><quantity>45</quantity><symbol>r</symbol></stock><stock><quantity>5</quantity><symbol>g</symbol></stock><stock><quantity>6</quantity><symbol>a</symbol></stock><stock><quantity>5</quantity><symbol>d</symbol></stock><stock><quantity>4</quantity><symbol>amaz</symbol></stock></stocks>
+</stocks>
 </root>

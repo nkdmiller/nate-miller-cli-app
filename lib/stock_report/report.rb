@@ -16,7 +16,6 @@ class StockReport::Report
   end
 
   def list
-    puts "------------------------------------------"
     total = 0.0
     list = Nokogiri::XML(File.open("report.xml"))
     stocks = list.xpath("//stock")
@@ -73,6 +72,7 @@ class StockReport::Report
       end
     end
   end
+
   def remove
     puts "Please enter the symbol of the stock you wish to remove."
     input = gets.strip
@@ -86,4 +86,13 @@ class StockReport::Report
     end
     File.write("report.xml", report.to_xml)
   end
+
+  def clear
+    report = Nokogiri::XML(File.open("report.xml"))
+    report.xpath("//stocks/stock").each do |stock|
+      stock.remove
+    end
+    File.write("report.xml", report.to_xml)
+  end
+
 end
