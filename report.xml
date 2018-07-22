@@ -1,8 +1,5 @@
+<?xml version="1.0"?>
 <root>
   <stocks>
-    <stock>
-      <quantity>3</quantity>
-      <symbol>MSFT</symbol>
-    </stock>
-  </stocks>
+</stocks>
 </root>
