@@ -32,10 +32,11 @@ class StockReport::Report
       puts "#{quantity.to_i} of #{symbol.upcase} - $#{price}"
       total += price
     end
-    puts "For a total portfolio value of $#{total}"
+    puts "The total value of your portfolio is $#{total}"
   end
 
   def add
+    puts "Please enter the symbol of the stock you wish to add."
     input = ""
     input = gets.strip
     url = "https://www.nasdaq.com/symbol/#{input}"
@@ -45,21 +46,31 @@ class StockReport::Report
     if price == ""
       puts "Stock not found."
     else
-      puts "Please enter the number of #{input.upcase} owned."
-      quantity = gets.strip
+      duplicate = false
       report = Nokogiri::XML(File.open("report.xml"))
       stocks = report.xpath("//stock")
-      new_stock = Nokogiri::XML::Node.new "stock", report
-      new_stock.add_child("<quantity>#{quantity}</quantity>")
-      new_stock.add_child("<symbol>#{input}</symbol>")
-      if stocks.empty?
-        report.xpath("//stocks").each do |node|
-          node << new_stock
+      report.xpath("//stocks/stock/symbol").each do |symbol|
+        if symbol.text.upcase == input.upcase
+          duplicate = true
         end
-      else
-        report.xpath("//stock").after(new_stock)
       end
-      File.write("report.xml", report.to_xml)
+      if duplicate == false
+        puts "Please enter the quantity of #{input.upcase} you wish to add."
+        quantity = gets.strip
+        new_stock = Nokogiri::XML::Node.new "stock", report
+        new_stock.add_child("<quantity>#{quantity}</quantity>")
+        new_stock.add_child("<symbol>#{input}</symbol>")
+        if stocks.empty?
+          report.xpath("//stocks").each do |node|
+            node << new_stock
+          end
+        else
+          report.xpath("//stock").after(new_stock)
+        end
+        File.write("report.xml", report.to_xml)
+      else
+        puts "This stock is already in your portfolio. If quantity has changed please remove the stock then add again with updated quantity."
+      end
     end
   end
 end
