@@ -17,15 +17,15 @@ class StockReport::CLI
       puts "Enter exit to leave the program."
       input = gets.strip
       if input == "1"
-        StockReport::Report.new.check
+        StockReport::Reporter.new.check
       elsif input == "2"
-        StockReport::Report.new.list
+        StockReport::Reporter.new.list
       elsif input == "3"
-        StockReport::Report.new.add
+        StockReport::Reporter.new.add
       elsif input == "4"
-        StockReport::Report.new.remove
+        StockReport::Reporter.new.remove
       elsif input == "5"
-        StockReport::Report.new.clear
+        StockReport::Reporter.new.clear
       end
     end
   end
