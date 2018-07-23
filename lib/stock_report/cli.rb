@@ -26,6 +26,8 @@ class StockReport::CLI
         StockReport::Reporter.new.remove
       elsif input == "5"
         StockReport::Reporter.new.clear
+      elsif input == "6"
+        StockReport::Reporter.new.most_active
       end
     end
   end

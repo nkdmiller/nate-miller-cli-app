@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <root>
   <stocks>
-</stocks>
+<stock><quantity>180</quantity><symbol>mu</symbol></stock></stocks>
 </root>

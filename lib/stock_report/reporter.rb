@@ -1,14 +1,30 @@
 class StockReport::Reporter
 
-  def check
-    puts "Please enter the stock symbol of the stock you wish to check on."
-    input = ""
-    input = gets.strip
+  def check(input = "")
+    if input == ""
+      puts "Please enter the stock symbol of the stock you wish to check on."
+      input = gets.strip
+    end
     price = StockReport::WebScraper.new("https://www.nasdaq.com/symbol/#{input}").price_lookup
+    name = StockReport::WebScraper.new("https://www.nasdaq.com/symbol/#{input}").name_lookup
     if price == nil
       puts "Stock not found."
     else
-      puts price
+      puts "#{name} is trading at #{price}"
+    end
+  end
+
+  def most_active
+    list = StockReport::WebScraper.new("https://www.nasdaq.com/markets/most-active.aspx").most_active
+    input = ""
+    while input != "exit"
+      puts "Please enter the number that you wish to learn more about [1-20]. Enter exit to return to the menu."
+      input = gets.strip
+      num = input.to_i - 1
+      if num >= 0 && num < 20
+        check_input = list[num]
+        check(check_input)
+      end
     end
   end
 
