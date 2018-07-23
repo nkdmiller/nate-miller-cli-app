@@ -55,7 +55,11 @@ class StockReport::Report
       end
       if duplicate == false
         puts "Please enter the quantity of #{input.upcase} you wish to add."
-        quantity = gets.strip
+        quantity = gets.strip.to_i
+        while quantity == 0
+          puts "Please enter a quantity of stocks that is 1 or more."
+          quantity = gets.strip.to_i
+        end
         new_stock = Nokogiri::XML::Node.new "stock", report
         new_stock.add_child("<quantity>#{quantity}</quantity>")
         new_stock.add_child("<symbol>#{input}</symbol>")
