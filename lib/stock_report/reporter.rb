@@ -25,24 +25,23 @@ class StockReport::Reporter
   end
 
   def add
+    #ASKS FOR STOCK BY SYMBOL AND MAKES SURE IT EXISTS
     puts "Please enter the symbol of the stock you wish to add."
     input = ""
     input = gets.strip
-    url = "https://www.nasdaq.com/symbol/#{input}"
-    doc = Nokogiri::HTML(open(url))
-    price = doc.css("div.qwidget-dollar").text
-    price.delete!("*")
+    price = StockReport::WebScraper.new("https://www.nasdaq.com/symbol/#{input}").price_lookup
     if price == ""
       puts "Stock not found."
+    #MAKES SURE THIS STOCK IS NOT ALREADY IN REPORT.XML
     else
       duplicate = false
-      report = Nokogiri::XML(File.open("report.xml"))
-      stocks = report.xpath("//stock")
-      report.xpath("//stocks/stock/symbol").each do |symbol|
-        if symbol.text.upcase == input.upcase
+      list = StockReport::StockScraper.new.list_stocks
+      list.each do |stock|
+        if stock.symbol == input.upcase
           duplicate = true
         end
       end
+      #ASKS FOR STOCK QUANTITY
       if duplicate == false
         puts "Please enter the quantity of #{input.upcase} you wish to add."
         quantity = gets.strip.to_i
@@ -50,17 +49,21 @@ class StockReport::Reporter
           puts "Please enter a quantity of stocks that is 1 or more."
           quantity = gets.strip.to_i
         end
-        new_stock = Nokogiri::XML::Node.new "stock", report
+        #OPENS A COPY OF REPORT.XML AND CREATES NEW NODE
+        new_doc = StockReport::StockScraper.new.doc
+        new_stock = Nokogiri::XML::Node.new "stock", new_doc
         new_stock.add_child("<quantity>#{quantity}</quantity>")
         new_stock.add_child("<symbol>#{input}</symbol>")
-        if stocks.empty?
-          report.xpath("//stocks").each do |node|
+        #NODE IS ADDED DIFFERENTLY IF REPORT.XML IS EMPTY
+        if list.empty?
+          new_doc.xpath("//stocks").each do |node|
             node << new_stock
           end
         else
-          report.xpath("//stock").after(new_stock)
+          new_doc.xpath("//stock").after(new_stock)
         end
-        File.write("report.xml", report.to_xml)
+        #THE NEW REPORT.XML IS SAVED
+        StockReport::StockScraper.save(new_doc)
       else
         puts "This stock is already in your portfolio. If quantity has changed please remove the stock then add again with updated quantity."
       end

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <root>
   <stocks>
-<stock><quantity>40</quantity><symbol>MSFT</symbol></stock><stock><quantity>55</quantity><symbol>T</symbol></stock></stocks>
+<stock><quantity>40</quantity><symbol>MSFT</symbol></stock><stock><quantity>55</quantity><symbol>T</symbol></stock><stock><quantity>12</quantity><symbol>f</symbol></stock></stocks>
 </root>
