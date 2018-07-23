@@ -1,23 +1,20 @@
-# class StockReport::StockScraper
-#   attr_accessor :file, :doc
-#
-#   def initialize
-#     @file = "report.xml"
-#     @doc = Nokogiri::XML(open(@file))
-#   end
-#
-#   def list_stocks
-#     # list = self.doc.xpath("//stock")
-#     # list.each do |stock|
-#     #   symbol = stock.xpath("symbol").text
-#     #   quantity = stock.xpath("quantity").text.to_f
-#     #   url = "https://www.nasdaq.com/symbol/#{symbol}"
-#     #   doc = Nokogiri::HTML(open(url))
-#     #   price = doc.css("div.qwidget-dollar").text
-#     #   price.delete!("*")
-#     #   price.delete!("$")
-#     #   price = (price.to_f * quantity).round(2)
-#     #   puts "#{quantity.to_i} of #{symbol.upcase} - $#{price}"
-#     #   total += price
-#   end
-# end
+class StockReport::StockScraper
+  attr_accessor :file, :doc
+
+  def initialize
+    @file = "report.xml"
+    @doc = Nokogiri::XML(open(@file))
+  end
+
+  def list_stocks
+    list = []
+    stocks = self.doc.xpath("//stock")
+    stocks.each do |info|
+      stock = StockReport::Stock.new(info.xpath("symbol").text)
+      stock.quantity = info.xpath("quantity").text.to_f
+      stock.price = StockReport::WebScraper.new("https://www.nasdaq.com/symbol/#{stock.symbol}").price_lookup
+      list << stock
+    end
+    return list
+  end
+end

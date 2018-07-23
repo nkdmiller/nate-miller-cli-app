@@ -8,24 +8,17 @@ class StockReport::Reporter
     if price == ""
       puts "Stock not found."
     else
-      puts self.report
+      puts price
     end
   end
 
   def list
     total = 0.0
-    list = Nokogiri::XML(File.open("report.xml"))
-    stocks = list.xpath("//stock")
-    stocks.each do |stock|
-      symbol = stock.xpath("symbol").text
-      quantity = stock.xpath("quantity").text.to_f
-      url = "https://www.nasdaq.com/symbol/#{symbol}"
-      doc = Nokogiri::HTML(open(url))
-      price = doc.css("div.qwidget-dollar").text
-      price.delete!("*")
-      price.delete!("$")
-      price = (price.to_f * quantity).round(2)
-      puts "#{quantity.to_i} of #{symbol.upcase} - $#{price}"
+    list = StockReport::StockScraper.new.list_stocks
+    list.each do |stock|
+      price = stock.price.delete("$")
+      price = (price.to_f * stock.quantity).round(2)
+      puts "#{stock.quantity.to_i} of #{stock.symbol.upcase} - $#{price}"
       total += price
     end
     puts "The total value of your portfolio is $#{total}"
