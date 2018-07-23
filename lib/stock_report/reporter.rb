@@ -5,7 +5,7 @@ class StockReport::Reporter
     input = ""
     input = gets.strip
     price = StockReport::WebScraper.new("https://www.nasdaq.com/symbol/#{input}").price_lookup
-    if price == ""
+    if price == nil
       puts "Stock not found."
     else
       puts price
@@ -30,7 +30,7 @@ class StockReport::Reporter
     input = ""
     input = gets.strip
     price = StockReport::WebScraper.new("https://www.nasdaq.com/symbol/#{input}").price_lookup
-    if price == ""
+    if price == nil
       puts "Stock not found."
     #MAKES SURE THIS STOCK IS NOT ALREADY IN REPORT.XML
     else
@@ -63,6 +63,7 @@ class StockReport::Reporter
           new_doc.xpath("//stock").after(new_stock)
         end
         #THE NEW REPORT.XML IS SAVED
+        puts "#{input.upcase} added to portfolio."
         StockReport::StockScraper.save(new_doc)
       else
         puts "This stock is already in your portfolio. If quantity has changed please remove the stock then add again with updated quantity."
@@ -73,15 +74,22 @@ class StockReport::Reporter
   def remove
     puts "Please enter the symbol of the stock you wish to remove."
     input = gets.strip
-    report = Nokogiri::XML(File.open("report.xml"))
-    report.xpath("//stocks/stock").each do |stock|
+    new_doc = StockReport::StockScraper.new.doc
+    found = false
+    new_doc.xpath("//stocks/stock").each do |stock|
       stock.children.each do |child|
         if child.text.upcase == input.upcase
           stock.remove
+          found = true
         end
       end
     end
-    File.write("report.xml", report.to_xml)
+    if found == true
+      puts "#{input.upcase} removed from portfolio."
+      StockReport::StockScraper.save(new_doc)
+    else
+      puts "#{input.upcase} was not found in portfolio. Please double-check entry and try again."
+    end
   end
 
   def clear
