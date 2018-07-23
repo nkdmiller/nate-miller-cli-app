@@ -21,7 +21,7 @@ class StockReport::Reporter
       puts "#{stock.quantity.to_i} of #{stock.symbol.upcase} - $#{price}"
       total += price
     end
-    puts "The total value of your portfolio is $#{total}"
+    puts "The total value of your portfolio is $#{total.round(2)}"
   end
 
   def add
@@ -93,11 +93,12 @@ class StockReport::Reporter
   end
 
   def clear
-    report = Nokogiri::XML(File.open("report.xml"))
-    report.xpath("//stocks/stock").each do |stock|
+    new_doc = StockReport::StockScraper.new.doc
+    new_doc.xpath("//stocks/stock").each do |stock|
       stock.remove
     end
-    File.write("report.xml", report.to_xml)
+    puts "Portfolio Erased."
+    StockReport::StockScraper.save(new_doc)
   end
 
 end
