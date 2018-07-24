@@ -1,6 +1,6 @@
 ﻿## Description
 
-This application scrapes data from NASDAQ.com to provide current stock prices. Users can get a list of the most traded stocks of the day. They can also look up anny stock on the website. Another feature of this app is the ability to add stocks to a portfolio. This portfolio is on an XML document that can be scraped and modified.
+This application scrapes data from NASDAQ.com to provide current stock prices. Users can get a list of the most traded stocks of the day. They can also look up the price of any stock. Another feature of this app is the ability to add stocks to a portfolio. This portfolio is stored on an XML document that can be scraped and modified.
 
 ## Installation
 
